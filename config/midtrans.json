@@ -1,0 +1,42 @@
+{
+  "providerId": "midtrans",
+  "displayName": "Midtrans Payment Gateway",
+  "sandbox": true,
+  "credentials": {
+    "serverKey": "SB-Mid-server-FAKE-KEY-123",
+    "clientKey": "SB-Mid-client-FAKE-KEY-456",
+    "merchantId": "G123456789"
+  },
+  "endpoints": {
+    "baseUrl": "https://api.sandbox.midtrans.com",
+    "createVa": "/v2/charge",
+    "createQris": "/v2/charge",
+    "checkStatus": "/v2/{order_id}/status",
+    "inquiry": "/v1/inquiry"
+  },
+  "paymentMethods": {
+    "VIRTUAL_ACCOUNT": {
+      "enabled": true,
+      "channels": ["BCA", "BNI", "BRI", "MANDIRI", "PERMATA"],
+      "expiryMinutes": 1440
+    },
+    "QRIS": {
+      "enabled": true,
+      "acquirer": "gopay",
+      "expiryMinutes": 30
+    }
+  },
+  "callback": {
+    "signatureKey": "FAKE-SIGNATURE-KEY-789",
+    "signatureAlgorithm": "SHA512"
+  },
+  "rateLimit": {
+    "requestsPerSecond": 50,
+    "burstSize": 100
+  },
+  "timeout": {
+    "connectMs": 5000,
+    "readMs": 30000,
+    "writeMs": 10000
+  }
+}

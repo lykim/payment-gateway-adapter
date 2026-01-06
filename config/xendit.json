@@ -1,0 +1,43 @@
+{
+  "providerId": "xendit",
+  "displayName": "Xendit Payment Gateway",
+  "sandbox": true,
+  "credentials": {
+    "apiKey": "xnd_development_FAKE_KEY_abc123",
+    "secretKey": "FAKE-SECRET-KEY-xyz789",
+    "callbackToken": "FAKE-CALLBACK-TOKEN-456",
+    "verificationToken": "FAKE-VERIFICATION-TOKEN-789"
+  },
+  "endpoints": {
+    "baseUrl": "https://api.xendit.co",
+    "createVa": "/callback_virtual_accounts",
+    "createQris": "/qr_codes",
+    "checkStatus": "/v2/invoices/{invoice_id}",
+    "inquiry": "/bank_account_data_requests",
+    "disburse": "/disbursements"
+  },
+  "paymentMethods": {
+    "VIRTUAL_ACCOUNT": {
+      "enabled": true,
+      "channels": ["BCA", "BNI", "BRI", "MANDIRI", "PERMATA", "BSI"],
+      "expiryMinutes": 1440
+    },
+    "QRIS": {
+      "enabled": true,
+      "type": "DYNAMIC",
+      "expiryMinutes": 15
+    }
+  },
+  "callback": {
+    "verificationToken": "FAKE-VERIFICATION-TOKEN-789"
+  },
+  "rateLimit": {
+    "requestsPerSecond": 100,
+    "burstSize": 200
+  },
+  "timeout": {
+    "connectMs": 5000,
+    "readMs": 30000,
+    "writeMs": 10000
+  }
+}

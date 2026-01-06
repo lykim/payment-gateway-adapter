@@ -1,0 +1,21 @@
+{
+  "providers": [
+    {
+      "id": "midtrans",
+      "enabled": true,
+      "labelCodes": ["MIDTRANS_VA_BCA", "MIDTRANS_VA_BNI", "MIDTRANS_VA_BRI", "MIDTRANS_VA_MANDIRI", "MIDTRANS_QRIS"],
+      "priority": 10
+    },
+    {
+      "id": "xendit",
+      "enabled": true,
+      "labelCodes": ["XENDIT_VA_BCA", "XENDIT_VA_BNI", "XENDIT_VA_BRI", "XENDIT_VA_MANDIRI", "XENDIT_VA_BSI", "XENDIT_QRIS"],
+      "priority": 5
+    }
+  ],
+  "defaults": {
+    "timeoutMs": 30000,
+    "maxRetries": 3,
+    "rateLimitPerSecond": 100
+  }
+}
