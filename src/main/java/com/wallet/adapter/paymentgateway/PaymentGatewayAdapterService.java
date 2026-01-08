@@ -97,6 +97,25 @@ public class PaymentGatewayAdapterService implements PaymentGatewayService {
         return provider.inquiryAccount(request);
     }
     
+    @Override
+    public String getCallbackUrl(String labelCode) {
+        PaymentGatewayProvider provider = getProviderForLabel(labelCode);
+        
+        // Get base callback URL from environment or configuration
+        String baseUrl = System.getenv("CALLBACK_BASE_URL");
+        if (baseUrl == null || baseUrl.isBlank()) {
+            baseUrl = "http://localhost:8080"; // Default for development
+        }
+        
+        // Construct callback URL with provider ID and label code
+        // Format: {baseUrl}/api/v1/deposits/callback/{providerId}/{labelCode}
+        return String.format("%s/api/v1/deposits/callback/%s/%s", 
+            baseUrl, 
+            provider.getProviderId(), 
+            labelCode
+        );
+    }
+    
     /**
      * Shutdown all providers gracefully
      */
