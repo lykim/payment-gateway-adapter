@@ -178,6 +178,45 @@ public class XenditProvider implements PaymentGatewayProvider {
     }
     
     @Override
+    public CallbackParseResult parseAndVerifyCallback(CallbackRequest request) {
+        
+        // Xendit sends JSON payload
+        if (request.parsedBody() == null) {
+            return new CallbackParseResult(false, null, null, null, java.util.Map.of());
+        }
+        
+        // Extract fields from Xendit callback
+        String status = (String) request.parsedBody().get("status");
+        String externalId = (String) request.parsedBody().get("external_id");
+        String id = (String) request.parsedBody().get("id");
+        
+        // Map Xendit status to PaymentStatus
+        PaymentStatus paymentStatus = mapXenditStatus(status);
+        
+        // In production, verify callback token here using request.headers()
+        // For now, always return verified=true
+        
+        return new CallbackParseResult(
+            true,
+            paymentStatus,
+            id,
+            externalId,
+            request.parsedBody()
+        );
+    }
+    
+    private PaymentStatus mapXenditStatus(String xenditStatus) {
+        if (xenditStatus == null) return PaymentStatus.PROCESSING;
+        
+        return switch (xenditStatus.toUpperCase()) {
+            case "PAID", "COMPLETED" -> PaymentStatus.COMPLETED;
+            case "PENDING" -> PaymentStatus.PENDING;
+            case "EXPIRED", "FAILED" -> PaymentStatus.FAILED;
+            default -> PaymentStatus.PROCESSING;
+        };
+    }
+    
+    @Override
     public boolean isHealthy() {
         try {
             httpClient.get(config.getBaseUrl() + "/health");

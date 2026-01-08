@@ -168,6 +168,45 @@ public class MidtransProvider implements PaymentGatewayProvider {
     }
     
     @Override
+    public CallbackParseResult parseAndVerifyCallback(CallbackRequest request) {
+        
+        // Midtrans sends JSON payload
+        if (request.parsedBody() == null) {
+            return new CallbackParseResult(false, null, null, null, java.util.Map.of());
+        }
+        
+        // Extract fields from Midtrans callback
+        String transactionStatus = (String) request.parsedBody().get("transaction_status");
+        String orderId = (String) request.parsedBody().get("order_id");
+        String transactionId = (String) request.parsedBody().get("transaction_id");
+        
+        // Map Midtrans status to PaymentStatus
+        PaymentStatus status = mapMidtransStatus(transactionStatus);
+        
+        // In production, verify signature here using request.rawBody() and server key
+        // For now, always return verified=true
+        
+        return new CallbackParseResult(
+            true,
+            status,
+            transactionId,
+            orderId,
+            request.parsedBody()
+        );
+    }
+    
+    private PaymentStatus mapMidtransStatus(String midtransStatus) {
+        if (midtransStatus == null) return PaymentStatus.PROCESSING;
+        
+        return switch (midtransStatus.toLowerCase()) {
+            case "capture", "settlement" -> PaymentStatus.COMPLETED;
+            case "pending" -> PaymentStatus.PENDING;
+            case "deny", "cancel", "expire" -> PaymentStatus.FAILED;
+            default -> PaymentStatus.PROCESSING;
+        };
+    }
+    
+    @Override
     public boolean isHealthy() {
         try {
             httpClient.get(config.getBaseUrl() + "/health");

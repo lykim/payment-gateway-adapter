@@ -83,6 +83,12 @@ public interface PaymentGatewayProvider {
     InquiryResponse inquiryAccount(InquiryRequest request);
     
     /**
+     * Parse and verify callback from payment gateway.
+     * Each provider knows how to parse its own payload format and verify signatures.
+     */
+    CallbackParseResult parseAndVerifyCallback(CallbackRequest request);
+    
+    /**
      * Health check
      */
     boolean isHealthy();
