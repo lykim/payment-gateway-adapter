@@ -7,6 +7,7 @@ import com.wallet.adapter.paymentgateway.support.*;
 import com.wallet.core.application.port.outbound.service.PaymentGatewayService.*;
 import com.wallet.core.domain.PaymentMethod;
 import com.wallet.core.domain.PaymentStatus;
+import com.wallet.core.domain.QrisDataType;
 
 import java.time.Duration;
 import java.util.*;
@@ -233,13 +234,12 @@ public class MidtransProvider implements PaymentGatewayProvider {
         String transactionId = (String) response.get("transaction_id");
         String orderId = (String) response.get("order_id");
         
-        // For VA, payment URL is typically a payment instruction page
-        String paymentUrl = config.getBaseUrl() + "/v2/payment/" + transactionId;
-        
+        // For VA, we don't have QRIS data, so return null
         return new PaymentGatewayResponse(
             transactionId,
             orderId,
-            paymentUrl,
+            null,
+            null,
             PaymentStatus.PROCESSING,
             Map.of(
                 "va_number", vaNumber != null ? vaNumber : "",
@@ -254,13 +254,12 @@ public class MidtransProvider implements PaymentGatewayProvider {
         String transactionId = (String) response.get("transaction_id");
         String orderId = (String) response.get("order_id");
         
-        // For QRIS, the payment URL could be the QR code image URL
-        String paymentUrl = "qris://" + qrString;
-        
+        // Midtrans returns QRIS as a string (EMV format)
         return new PaymentGatewayResponse(
             transactionId,
             orderId,
-            paymentUrl,
+            qrString,
+            QrisDataType.STRING,
             PaymentStatus.PROCESSING,
             Map.of(
                 "qr_string", qrString != null ? qrString : "",

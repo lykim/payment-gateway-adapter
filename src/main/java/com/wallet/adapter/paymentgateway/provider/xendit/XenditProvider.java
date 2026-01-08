@@ -7,6 +7,7 @@ import com.wallet.adapter.paymentgateway.support.*;
 import com.wallet.core.application.port.outbound.service.PaymentGatewayService.*;
 import com.wallet.core.domain.PaymentMethod;
 import com.wallet.core.domain.PaymentStatus;
+import com.wallet.core.domain.QrisDataType;
 
 import java.time.Duration;
 import java.util.*;
@@ -256,12 +257,12 @@ public class XenditProvider implements PaymentGatewayProvider {
             orderId = (String) response.get("external_id");
         }
         
-        String paymentUrl = config.getBaseUrl() + "/callback_virtual_accounts/" + transactionId;
-        
+        // For VA, we don't have QRIS data, so return null
         return new PaymentGatewayResponse(
             transactionId,
             orderId,
-            paymentUrl,
+            null,
+            null,
             PaymentStatus.PROCESSING,
             Map.of(
                 "va_number", vaNumber != null ? vaNumber : "",
@@ -283,12 +284,12 @@ public class XenditProvider implements PaymentGatewayProvider {
             transactionId = (String) response.get("id");
         }
         
-        String paymentUrl = "qris://" + qrString;
-        
+        // Xendit returns QRIS as a string (EMV format)
         return new PaymentGatewayResponse(
             transactionId,
             orderId,
-            paymentUrl,
+            qrString,
+            QrisDataType.STRING,
             PaymentStatus.PROCESSING,
             Map.of(
                 "qr_string", qrString != null ? qrString : "",
