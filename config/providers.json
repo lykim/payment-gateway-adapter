@@ -3,13 +3,13 @@
     {
       "id": "midtrans",
       "enabled": true,
-      "labelCodes": ["MIDTRANS_VA_BCA", "MIDTRANS_VA_BNI", "MIDTRANS_VA_BRI", "MIDTRANS_VA_MANDIRI", "MIDTRANS_QRIS"],
+      "labelCodes": ["MIDTRANS_WL_1", "MIDTRANS_WL_2", "MIDTRANS_VA_BRI", "MIDTRANS_VA_MANDIRI", "MIDTRANS_QRIS"],
       "priority": 10
     },
     {
       "id": "xendit",
       "enabled": true,
-      "labelCodes": ["XENDIT_VA_BCA", "XENDIT_VA_BNI", "XENDIT_VA_BRI", "XENDIT_VA_MANDIRI", "XENDIT_VA_BSI", "XENDIT_QRIS"],
+      "labelCodes": ["XENDIT_WL_1", "XENDIT_WL2", "XENDIT_VA_BRI", "XENDIT_VA_MANDIRI", "XENDIT_VA_BSI", "XENDIT_QRIS"],
       "priority": 5
     }
   ],
